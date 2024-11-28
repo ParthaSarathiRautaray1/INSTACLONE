@@ -38,7 +38,7 @@ Currently, two official plugins are available:
 
   scripts for bulid frontend and backend and run the server
 
-# st 8 - 
+# st 8 - push to Github repo.
 
 
 

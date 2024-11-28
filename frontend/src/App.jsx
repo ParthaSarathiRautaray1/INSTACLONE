@@ -7,7 +7,7 @@ import Login from './components/Login'
 import MainLayout from './components/MainLayout'
 import Profile from './components/Profile'
 import ProtectedRoutes from './components/ProtectedRoutes'
-import Signup from './components/signup'
+import Signup from './components/Signup'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { io } from "socket.io-client"
 import { useDispatch, useSelector } from 'react-redux'
