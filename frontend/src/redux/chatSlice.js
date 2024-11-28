@@ -1,13 +1,36 @@
-import { createSlice } from "@reduxjs/toolkit"
+// import { createSlice } from "@reduxjs/toolkit"
 
+
+// const chatSlice = createSlice({
+//     name:"chat",
+//     initialState:{
+//         onlineUsers:[],
+//         messages:[]
+//     },
+//     reducers:{
+//         setOnlineUsers:(state,action) => {
+//             state.onlineUsers = action.payload;
+//         },
+//         setMessages:(state,action) => {
+//             state.messages = action.payload;
+//         }
+//     }
+// })
+
+// export const { setOnlineUsers, setMessages } = chatSlice.actions;
+// export default chatSlice.reducer;
+
+
+import { createSlice } from "@reduxjs/toolkit";
 
 const chatSlice = createSlice({
     name:"chat",
     initialState:{
         onlineUsers:[],
-        messages:[]
+        messages:[],
     },
     reducers:{
+        // actions
         setOnlineUsers:(state,action) => {
             state.onlineUsers = action.payload;
         },
@@ -15,7 +38,6 @@ const chatSlice = createSlice({
             state.messages = action.payload;
         }
     }
-})
-
-export const { setOnlineUsers, setMessages } = chatSlice.actions;
+});
+export const {setOnlineUsers, setMessages} = chatSlice.actions;
 export default chatSlice.reducer;

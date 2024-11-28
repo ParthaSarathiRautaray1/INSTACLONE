@@ -1,4 +1,100 @@
 
+// import { useEffect } from 'react'
+// import ChatPage from './components/ChatPage'
+// import EditProfile from './components/EditProfile'
+// import Home from './components/Home'
+// import Login from './components/Login'
+// import MainLayout from './components/MainLayout'
+// import Profile from './components/Profile'
+// import ProtectedRoutes from './components/ProtectedRoutes'
+// import Signup from './components/Signup'
+// import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+// import { io } from "socket.io-client"
+// import { useDispatch, useSelector } from 'react-redux'
+// import store from './redux/store'
+// import { setSocket } from './redux/socketSlice'
+// import { setOnlineUsers } from './redux/chatSlice'
+// import { setLikeNotification } from './redux/rtnSlice'
+// const browserRouter = createBrowserRouter([
+//   {
+//     path: "/",
+//     element: <ProtectedRoutes><MainLayout /></ProtectedRoutes>,
+//     children: [
+//       {
+//         path: '/',
+//         element: <ProtectedRoutes><Home /></ProtectedRoutes>
+//       },
+//       {
+//         path: '/profile/:id',
+//         element: <ProtectedRoutes> <Profile /></ProtectedRoutes>
+//       },
+//       {
+//         path: '/account/edit',
+//         element: <ProtectedRoutes> <EditProfile /></ProtectedRoutes>
+//       },
+//       {
+//         path: '/chat',
+//         element: <ProtectedRoutes> <ChatPage /></ProtectedRoutes>
+//       },
+//     ]
+//   },
+//   {
+//     path: '/login',
+//     element: <Login />
+//   },
+
+//   {
+//     path: '/signup',
+//     element: <Signup />
+//   },
+// ])
+
+// function App() {
+//   const { user } = useSelector(store => store.auth)
+//   const {socket} = useSelector(store => store.socketio)
+//   const dispatch = useDispatch();
+//   useEffect(() => {
+//     if (user && user._id) {
+//       const socketio = io('https://instaclone-jg5h.onrender.com', {
+//         query: {
+//           userId: user?._id
+//         },
+//         transports: ['websocket']
+//       })
+//       dispatch(setSocket(socketio))
+
+//       socketio.on('getOnlineUsers', (onlineUsers) => {
+//         dispatch(setOnlineUsers(onlineUsers))
+//       })
+
+//       socketio.on('notification', (notification) => {
+//         dispatch(setLikeNotification(notification));
+//       })
+
+
+
+
+//       return () => {
+//         socketio.close();
+//         dispatch(setSocket(null))
+//       }
+//     } else if(socket) {
+//       socket?.close();
+//       dispatch(setSocket(null))
+//     }
+//   }, [user, dispatch])
+
+//   return (
+//     <>
+//       <RouterProvider router={browserRouter} />
+//     </>
+//   )
+// }
+
+// export default App
+
+
+
 import { useEffect } from 'react'
 import ChatPage from './components/ChatPage'
 import EditProfile from './components/EditProfile'
@@ -6,15 +102,16 @@ import Home from './components/Home'
 import Login from './components/Login'
 import MainLayout from './components/MainLayout'
 import Profile from './components/Profile'
-import ProtectedRoutes from './components/ProtectedRoutes'
 import Signup from './components/Signup'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { io } from "socket.io-client"
+import { io } from "socket.io-client";
 import { useDispatch, useSelector } from 'react-redux'
-import store from './redux/store'
 import { setSocket } from './redux/socketSlice'
 import { setOnlineUsers } from './redux/chatSlice'
 import { setLikeNotification } from './redux/rtnSlice'
+import ProtectedRoutes from './components/ProtectedRoutes'
+
+
 const browserRouter = createBrowserRouter([
   {
     path: "/",
@@ -30,11 +127,11 @@ const browserRouter = createBrowserRouter([
       },
       {
         path: '/account/edit',
-        element: <ProtectedRoutes> <EditProfile /></ProtectedRoutes>
+        element: <ProtectedRoutes><EditProfile /></ProtectedRoutes>
       },
       {
         path: '/chat',
-        element: <ProtectedRoutes> <ChatPage /></ProtectedRoutes>
+        element: <ProtectedRoutes><ChatPage /></ProtectedRoutes>
       },
     ]
   },
@@ -42,7 +139,6 @@ const browserRouter = createBrowserRouter([
     path: '/login',
     element: <Login />
   },
-
   {
     path: '/signup',
     element: <Signup />
@@ -50,9 +146,10 @@ const browserRouter = createBrowserRouter([
 ])
 
 function App() {
-  const { user } = useSelector(store => store.auth)
-  const {socket} = useSelector(store => store.socketio)
+  const { user } = useSelector(store => store.auth);
+  const { socket } = useSelector(store => store.socketio);
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (user) {
       const socketio = io('http://localhost:8000', {
@@ -60,29 +157,27 @@ function App() {
           userId: user?._id
         },
         transports: ['websocket']
-      })
-      dispatch(setSocket(socketio))
+      });
+      dispatch(setSocket(socketio));
 
+      // listen all the events
       socketio.on('getOnlineUsers', (onlineUsers) => {
-        dispatch(setOnlineUsers(onlineUsers))
-      })
+        dispatch(setOnlineUsers(onlineUsers));
+      });
 
       socketio.on('notification', (notification) => {
         dispatch(setLikeNotification(notification));
-      })
-
-
-
+      });
 
       return () => {
         socketio.close();
-        dispatch(setSocket(null))
+        dispatch(setSocket(null));
       }
-    } else if(socket) {
-      socket?.close();
-      dispatch(setSocket(null))
+    } else if (socket) {
+      socket.close();
+      dispatch(setSocket(null));
     }
-  }, [user, dispatch])
+  }, [user, dispatch]);
 
   return (
     <>

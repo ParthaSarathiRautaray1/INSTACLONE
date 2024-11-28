@@ -41,13 +41,14 @@ function Login() {
             }) 
             if(res.data.success){
                 dispatch(setAuthUser(res.data.user))
-                navigate('/')
+                
                 toast.success(res.data.message);
                 setInput({
                    
                     email:"",
                     password:""
                 })
+                navigate('/')
             } 
 
         } catch (error) {
