@@ -183,6 +183,7 @@ import CreatePost from './CreatePost'
 import { setPosts, setSelectedPost } from '@/redux/postSlice'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { Button } from './ui/button'
+import { clearNotifications } from '@/redux/rtnSlice'
 
 const LeftSidebar = () => {
     const navigate = useNavigate();
@@ -239,10 +240,23 @@ const LeftSidebar = () => {
         },
         { icon: <LogOut />, text: "Logout" },
     ]
+
+
+    const handleNotificationOpen = () => {
+                setTimeout(() => {
+                    dispatch(clearNotifications());
+                }, 3000);
+            }
     return (
         <div className='fixed top-0 z-10 left-0 px-4 border-r border-gray-300 w-[16%] h-screen'>
             <div className='flex flex-col'>
-                <h1 className='my-8 pl-3 font-bold text-xl'>LOGO</h1>
+            <h1 className="py-8 pl-7">
+                <img 
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/2048px-Instagram_logo_2022.svg.png"
+                    alt="Instagram"
+                    className=" w-10 h-10"
+                />
+            </h1>
                 <div>
                     {
                         sidebarItems.map((item, index) => {
@@ -253,7 +267,7 @@ const LeftSidebar = () => {
                                     {
                                         item.text === "Notifications" && likeNotification.length > 0 && (
                                             <Popover>
-                                                <PopoverTrigger asChild>
+                                                <PopoverTrigger asChild onClick={handleNotificationOpen}>
                                                     <Button size='icon' className="rounded-full h-5 w-5 bg-red-600 hover:bg-red-600 absolute bottom-6 left-6">{likeNotification.length}</Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent>
