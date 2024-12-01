@@ -202,7 +202,7 @@ const CommentDialog = ({ open, setOpen }) => {
                 </Link>
                 <div>
                   <Link className='font-semibold text-xs'>{selectedPost?.author?.username}</Link>
-                  {/* <span className='text-gray-600 text-sm'>Bio here...</span> */}
+                 
                 </div>
               </div>
 
@@ -223,7 +223,9 @@ const CommentDialog = ({ open, setOpen }) => {
             <hr />
             <div className='flex-1 overflow-y-auto max-h-96 p-4'>
               {
-                comment.map((comment) => <Comment key={comment._id} comment={comment} />)
+                comment.map((comment) => (
+                  comment?.author ? <Comment key={comment._id} comment={comment} /> : null
+                ))
               }
             </div>
             <div className='p-4'>
