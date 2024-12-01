@@ -38,7 +38,7 @@
 
 //     } catch (error) {
 //         console.log(error);
-        
+
 //     }
 // }
 
@@ -68,7 +68,7 @@
 //                 success:false,
 //             })
 //         }
-        
+
 //         const token = await jwt.sign({userId:user._id},process.env.SECRET_KEY,{expiresIn:'1d'})
 
 
@@ -97,13 +97,13 @@
 //             message:`welocome back ${user.username}`,
 //             success:true,
 //             user,
-            
+
 //         })
 
-        
+
 //     } catch (error) {
 //         console.log(error);
-        
+
 //     }
 // }
 
@@ -117,8 +117,8 @@
 
 //     } catch (error) {
 //         console.log(error);
-        
-        
+
+
 //     }
 // }
 
@@ -133,8 +133,8 @@
 //         })
 //     } catch (error) {
 //         console.log(error);
-        
-        
+
+
 //     }
 // }
 
@@ -172,7 +172,7 @@
 
 //     } catch(error){
 //         console.log(error);
-        
+
 //     }
 // }
 
@@ -193,7 +193,7 @@
 //         })
 //     } catch (error) {
 //         console.log(error);
-        
+
 //     }
 // }
 
@@ -246,10 +246,10 @@
 //                 success:true
 //             })
 //         }
-        
+
 //     } catch (error) {
 //         console.log(error);
-        
+
 //     }
 // }
 
@@ -318,9 +318,9 @@ export const login = async (req, res) => {
 
         // populate each post if in the posts array
         const populatedPosts = await Promise.all(
-            user.posts.map( async (postId) => {
+            user.posts.map(async (postId) => {
                 const post = await Post.findById(postId);
-                if(post.author.equals(user._id)){
+                if (post.author.equals(user._id)) {
                     return post;
                 }
                 return null;
@@ -359,7 +359,8 @@ export const logout = async (_, res) => {
 export const getProfile = async (req, res) => {
     try {
         const userId = req.params.id;
-        let user = await User.findById(userId).populate({path:'posts', createdAt:-1}).populate('bookmarks');
+        let user = await User.findById(userId).populate({ path: 'posts',  options: { sort: { createdAt: -1 } } }).populate('bookmarks');
+       
         return res.status(200).json({
             user,
             success: true
@@ -422,8 +423,8 @@ export const getSuggestedUsers = async (req, res) => {
 };
 export const followOrUnfollow = async (req, res) => {
     try {
-        const followKrneWala = req.id; // patel
-        const jiskoFollowKrunga = req.params.id; // shivani
+        const followKrneWala = req.id;
+        const jiskoFollowKrunga = req.params.id;
         if (followKrneWala === jiskoFollowKrunga) {
             return res.status(400).json({
                 message: 'You cannot follow/unfollow yourself',
@@ -440,17 +441,17 @@ export const followOrUnfollow = async (req, res) => {
                 success: false
             });
         }
-        // mai check krunga ki follow krna hai ya unfollow
+
         const isFollowing = user.following.includes(jiskoFollowKrunga);
         if (isFollowing) {
-            // unfollow logic ayega
+            // unfollow logic
             await Promise.all([
                 User.updateOne({ _id: followKrneWala }, { $pull: { following: jiskoFollowKrunga } }),
                 User.updateOne({ _id: jiskoFollowKrunga }, { $pull: { followers: followKrneWala } }),
             ])
             return res.status(200).json({ message: 'Unfollowed successfully', success: true });
         } else {
-            // follow logic ayega
+            // follow logic 
             await Promise.all([
                 User.updateOne({ _id: followKrneWala }, { $push: { following: jiskoFollowKrunga } }),
                 User.updateOne({ _id: jiskoFollowKrunga }, { $push: { followers: followKrneWala } }),
