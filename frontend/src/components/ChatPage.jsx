@@ -120,7 +120,7 @@ const ChatPage = () => {
 
     const sendMessageHandler = async (receiverId) => {
         try {
-            const res = await axios.post(`https://instaclone-jg5h.onrender.com/api/v1/message/send/${receiverId}`, { textMessage }, {
+            const res = await axios.post(`http://localhost:8000/api/v1/message/send/${receiverId}`, { textMessage }, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -198,3 +198,6 @@ const ChatPage = () => {
 }
 
 export default ChatPage
+
+
+// `https://instaclone-jg5h.onrender.com/api/v1/message/send/${receiverId}`

@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: instaclone-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - NODE_ENV=production
+      - PORT=8000
+      - URL=http://frontend
+      - MONGO_URI=${MONGO_URI}
+      
+      - SECRET_KEY=${SECRET_KEY}
+      - API_KEY=${API_KEY}
+      - API_SECRET=${API_SECRET}
+      - CLOUD_NAME=${CLOUD_NAME}
+    restart: always
+    networks:
+      - instaclone-network
+
+  frontend:
+    build: ./frontend
+    container_name: instaclone-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - instaclone-network
+
+networks:
+  instaclone-network:
+    driver: bridge
