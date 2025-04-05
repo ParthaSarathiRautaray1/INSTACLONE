@@ -116,7 +116,6 @@
 
 // export default CreatePost
 
-
 import React, { useRef, useState } from 'react'
 import { Dialog, DialogContent, DialogHeader } from './ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
@@ -138,6 +137,16 @@ const CreatePost = ({ open, setOpen }) => {
   const {user} = useSelector(store=>store.auth);
   const {posts} = useSelector(store=>store.post);
   const dispatch = useDispatch();
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fileChangeHandler = async (e) => {
     const file = e.target.files?.[0];
@@ -161,9 +170,12 @@ const CreatePost = ({ open, setOpen }) => {
         withCredentials: true
       });
       if (res.data.success) {
-        dispatch(setPosts([res.data.post, ...posts]));// [1] -> [1,2] -> total element = 2
+        dispatch(setPosts([res.data.post, ...posts]));
         toast.success(res.data.message);
         setOpen(false);
+        setCaption("");
+        setImagePreview("");
+        setFile("");
       }
     } catch (error) {
       toast.error(error.response.data.message);
@@ -174,7 +186,10 @@ const CreatePost = ({ open, setOpen }) => {
 
   return (
     <Dialog open={open}>
-      <DialogContent onInteractOutside={() => setOpen(false)}>
+      <DialogContent 
+        onInteractOutside={() => setOpen(false)}
+        className={`${isMobile ? 'w-[95vw] max-w-[95vw]' : ''}`}
+      >
         <DialogHeader className='text-center font-semibold'>Create New Post</DialogHeader>
         <div className='flex gap-3 items-center'>
           <Avatar>
