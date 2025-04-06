@@ -9,7 +9,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8000
-      - URL=${URL}
+      - URL=http://instaclone-env.eba-wumsgjeg.ap-south-1.elasticbeanstalk.com
       - MONGO_URI=${MONGO_URI}
       - SECRET_KEY=${SECRET_KEY}
       - API_KEY=${API_KEY}
