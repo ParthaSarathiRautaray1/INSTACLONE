@@ -9,13 +9,16 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8000
-      - URL=http://instaclone-env.eba-wumsgjeg.ap-south-1.elasticbeanstalk.com
+      - URL=http://frontend
       - MONGO_URI=${MONGO_URI}
+      
       - SECRET_KEY=${SECRET_KEY}
       - API_KEY=${API_KEY}
       - API_SECRET=${API_SECRET}
       - CLOUD_NAME=${CLOUD_NAME}
     restart: always
+    networks:
+      - instaclone-network
 
   frontend:
     build: ./frontend
@@ -25,3 +28,9 @@ services:
     depends_on:
       - backend
     restart: always
+    networks:
+      - instaclone-network
+
+networks:
+  instaclone-network:
+    driver: bridge
