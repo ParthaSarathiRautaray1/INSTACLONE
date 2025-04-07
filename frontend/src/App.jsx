@@ -110,6 +110,7 @@ import { setSocket } from './redux/socketSlice'
 import { setOnlineUsers } from './redux/chatSlice'
 import { setLikeNotification } from './redux/rtnSlice'
 import ProtectedRoutes from './components/ProtectedRoutes'
+import API_BASE_URL from './config/api'
 
 
 const browserRouter = createBrowserRouter([
@@ -152,7 +153,7 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      const socketio = io('https://instaclone-jg5h.onrender.com', {
+      const socketio = io(`${API_BASE_URL}`, {
         query: {
           userId: user?._id
         },
