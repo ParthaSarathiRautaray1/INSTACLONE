@@ -11,6 +11,9 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
+# Set the API URL for production
+ENV VITE_API_URL=http://instaclone-env.eba-wumsgjeg.ap-south-1.elasticbeanstalk.com
+
 # Build the application
 RUN npm run build
 
