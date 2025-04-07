@@ -137,6 +137,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
+import API_BASE_URL from '@/config/api';
+
 const Signup = () => {
     const [input, setInput] = useState({
         username: "",
@@ -155,7 +157,7 @@ const Signup = () => {
         e.preventDefault();
         try {
             setLoading(true);
-            const res = await axios.post('http://localhost:8000/api/v1/user/register', input, {
+            const res = await axios.post(`${API_BASE_URL}/api/v1/user/register`, input, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

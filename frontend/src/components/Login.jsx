@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react'
 import { setAuthUser } from '@/redux/authSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import store from '@/redux/store'
+import  API_BASE_URL  from '@/config/api'
 
 function Login() {
 
@@ -32,7 +33,8 @@ function Login() {
         
         try {
             setLoading(true)
-            const res = await axios.post('http://localhost:8000/api/v1/user/login',input , {
+
+            const res = await axios.post(`${API_BASE_URL}/api/v1/user/login`,input , {
                 headers:{
                     'Content-Type':'application/json'
                 },

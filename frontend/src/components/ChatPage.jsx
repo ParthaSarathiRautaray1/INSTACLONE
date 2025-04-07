@@ -111,6 +111,8 @@ import Messages from './Messages';
 import axios from 'axios';
 import { setMessages } from '@/redux/chatSlice';
 
+import API_BASE_URL from '@/config/api';
+
 const ChatPage = () => {
     const [textMessage, setTextMessage] = useState("");
     const { user, suggestedUsers, selectedUser } = useSelector(store => store.auth);
@@ -129,7 +131,7 @@ const ChatPage = () => {
 
     const sendMessageHandler = async (receiverId) => {
         try {
-            const res = await axios.post(`http://localhost:8000/api/v1/message/send/${receiverId}`, { textMessage }, {
+            const res = await axios.post(`${API_BASE_URL}/api/v1/message/send/${receiverId}`, { textMessage }, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
