@@ -153,14 +153,27 @@ function App() {
 
   useEffect(() => {
     if (user) {
-      const socketio = io(`${API_BASE_URL}`, {
+      // Convert http:// to ws:// or https:// to wss://
+      const wsUrl = API_BASE_URL.replace(/^http/, 'ws');
+      console.log("Connecting to WebSocket at:", wsUrl);
+      
+      const socketio = io(wsUrl, {
         query: {
           userId: user?._id
         },
-        transports: ['websocket']
+        transports: ['websocket'],
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000
       });
       dispatch(setSocket(socketio));
 
+      socketio.on('connect', () => {
+        console.log("Socket connected successfully");
+      });
+  
+      socketio.on('connect_error', (error) => {
+        console.error("Socket connection error:", error);
+      });
       // listen all the events
       socketio.on('getOnlineUsers', (onlineUsers) => {
         dispatch(setOnlineUsers(onlineUsers));
