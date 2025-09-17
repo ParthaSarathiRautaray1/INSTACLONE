@@ -35,7 +35,7 @@ const CreatePost = ({ open, setOpen }) => {
     formData.append("caption", caption);
     if (imagePreview) formData.append("image", file);
     try {
-      setLoading(true);
+      setLoading(true);  
       const res = await axios.post('https://instaclone-jg5h.onrender.com/api/v1/post/addpost', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -43,7 +43,7 @@ const CreatePost = ({ open, setOpen }) => {
         withCredentials: true
       });
       if (res.data.success) {
-        dispatch(setPosts([res.data.post, ...posts]));// [1] -> [1,2] -> total element = 2
+        dispatch(setPosts([res.data.post, ...posts]));
         toast.success(res.data.message);
         setOpen(false);
       }
