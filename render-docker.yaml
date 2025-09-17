@@ -1,0 +1,37 @@
+# Docker-based deployment on Render - Using existing backend URL
+services:
+  - type: web
+    name: instaclone-backend
+    runtime: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend/
+    env:
+      - key: PORT
+        value: 8000
+      - key: NODE_ENV
+        value: production
+    envVars:
+      - key: MONGO_URI
+        sync: false
+      - key: SECRET_KEY  
+        sync: false
+      - key: API_KEY
+        sync: false
+      - key: API_SECRET
+        sync: false
+      - key: CLOUD_NAME
+        sync: false
+      - key: URL
+        value: https://your-frontend-name.onrender.com
+    
+  - type: web
+    name: instaclone-frontend
+    runtime: docker
+    dockerfilePath: frontend/Dockerfile
+    dockerContext: frontend/
+    env:
+      - key: VITE_API_URL
+        value: https://instaclone-jg5h.onrender.com
+    dockerBuildArgs:
+      - key: VITE_API_URL
+        value: https://instaclone-jg5h.onrender.com

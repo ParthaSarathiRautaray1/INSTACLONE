@@ -14,4 +14,3 @@ const ProtectedRoutes = ({children}) => {
 }
 
 export default ProtectedRoutes;
-

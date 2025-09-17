@@ -7,11 +7,10 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=8000
-      - URL=http://frontend
+      - URL=http://localhost:3000
       - MONGO_URI=${MONGO_URI}
-      
       - SECRET_KEY=${SECRET_KEY}
       - API_KEY=${API_KEY}
       - API_SECRET=${API_SECRET}

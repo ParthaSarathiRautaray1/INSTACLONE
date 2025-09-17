@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar'
 import { useSelector } from 'react-redux'
@@ -7,7 +8,7 @@ import SuggestedUsers from './SuggestedUsers';
 const RightSidebar = () => {
   const { user } = useSelector(store => store.auth);
   return (
-    <div className='w-fit my-10 pr-4 md:pr-32 hidden md:block'>
+    <div className='w-fit my-10 pr-32'>
       <div className='flex items-center gap-2'>
         <Link to={`/profile/${user?._id}`}>
           <Avatar>

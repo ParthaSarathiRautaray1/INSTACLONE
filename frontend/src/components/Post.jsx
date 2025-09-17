@@ -11,8 +11,6 @@ import { toast } from 'sonner'
 import { setPosts, setSelectedPost } from '@/redux/postSlice'
 import { Badge } from './ui/badge'
 
-import API_BASE_URL from '@/config/api'
-
 const Post = ({ post }) => {
     const [text, setText] = useState("");
     const [open, setOpen] = useState(false);
@@ -22,7 +20,7 @@ const Post = ({ post }) => {
     const [postLike, setPostLike] = useState(post.likes.length);
     const [comment, setComment] = useState(post.comments);
     const dispatch = useDispatch();
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     React.useEffect(() => {
         const handleResize = () => {
@@ -45,12 +43,14 @@ const Post = ({ post }) => {
     const likeOrDislikeHandler = async () => {
         try {
             const action = liked ? 'dislike' : 'like';
-            const res = await axios.get(`${API_BASE_URL}/api/v1/post/${post._id}/${action}`, { withCredentials: true });
+            const res = await axios.get(`https://instaclone-jg5h.onrender.com/api/v1/post/${post._id}/${action}`, { withCredentials: true });
+            console.log(res.data);
             if (res.data.success) {
                 const updatedLikes = liked ? postLike - 1 : postLike + 1;
                 setPostLike(updatedLikes);
                 setLiked(!liked);
 
+                // apne post ko update krunga
                 const updatedPostData = posts.map(p =>
                     p._id === post._id ? {
                         ...p,
@@ -66,19 +66,21 @@ const Post = ({ post }) => {
     }
 
     const commentHandler = async () => {
+
         try {
-            const res = await axios.post(`${API_BASE_URL}/api/v1/post/${post._id}/comment`, { text }, {
+            const res = await axios.post(`https://instaclone-jg5h.onrender.com/api/v1/post/${post._id}/comment`, { text }, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true
             });
+            console.log(res.data);
             if (res.data.success) {
                 const updatedCommentData = [...comment, res.data.comment];
                 setComment(updatedCommentData);
 
                 const updatedPostData = posts.map(p =>
-                    p._id === post?._id ? { ...p, comments: updatedCommentData } : p
+                    p._id === post._id ? { ...p, comments: updatedCommentData } : p
                 );
 
                 dispatch(setPosts(updatedPostData));
@@ -92,7 +94,7 @@ const Post = ({ post }) => {
 
     const deletePostHandler = async () => {
         try {
-            const res = await axios.delete(`${API_BASE_URL}/api/v1/post/delete/${post?._id}`, { withCredentials: true })
+            const res = await axios.delete(`https://instaclone-jg5h.onrender.com/api/v1/post/delete/${post?._id}`, { withCredentials: true })
             if (res.data.success) {
                 const updatedPostData = posts.filter((postItem) => postItem?._id !== post?._id);
                 dispatch(setPosts(updatedPostData));
@@ -106,7 +108,7 @@ const Post = ({ post }) => {
 
     const bookmarkHandler = async () => {
         try {
-            const res = await axios.get(`${API_BASE_URL}/api/v1/post/${post?._id}/bookmark`, {withCredentials:true});
+            const res = await axios.get(`https://instaclone-jg5h.onrender.com/api/v1/post/${post?._id}/bookmark`, {withCredentials:true});
             if(res.data.success){
                 toast.success(res.data.message);
             }
@@ -114,32 +116,31 @@ const Post = ({ post }) => {
             console.log(error);
         }
     }
-    
     return (
-        <div className='my-8 w-full max-w-sm mx-auto px-4 md:px-0'>
+        <div className='my-8 w-full max-w-sm mx-auto'>
             <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-2'>
                     <Avatar>
-                        <AvatarImage src={post?.author?.profilePicture} alt="post_image" />
+                        <AvatarImage src={post.author?.profilePicture} alt="post_image" />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div className='flex items-center gap-3'>
-                        <h1 className="text-sm">{post?.author?.username}</h1>
-                       {user?._id === post?.author?._id &&  <Badge variant="secondary">Author</Badge>}
+                        <h1>{post.author?.username}</h1>
+                       {user?._id === post.author._id &&  <Badge variant="secondary">Author</Badge>}
                     </div>
                 </div>
                 <Dialog>
                     <DialogTrigger asChild>
                         <MoreHorizontal className='cursor-pointer' />
                     </DialogTrigger>
-                    <DialogContent className={`flex flex-col items-center text-sm text-center ${isMobile ? 'w-[90vw] max-w-[90vw]' : ''}`}>
+                    <DialogContent className="flex flex-col items-center text-sm text-center">
                         {
                         post?.author?._id !== user?._id && <Button variant='ghost' className="cursor-pointer w-fit text-[#ED4956] font-bold">Unfollow</Button>
                         }
                         
                         <Button variant='ghost' className="cursor-pointer w-fit">Add to favorites</Button>
                         {
-                            user && user?._id === post?.author?._id && <Button onClick={deletePostHandler} variant='ghost' className="cursor-pointer w-fit">Delete</Button>
+                            user && user?._id === post?.author._id && <Button onClick={deletePostHandler} variant='ghost' className="cursor-pointer w-fit">Delete</Button>
                         }
                     </DialogContent>
                 </Dialog>
@@ -165,7 +166,7 @@ const Post = ({ post }) => {
                 <Bookmark onClick={bookmarkHandler} className='cursor-pointer hover:text-gray-600' />
             </div>
             <span className='font-medium block mb-2'>{postLike} likes</span>
-            <p className="text-sm">
+            <p>
                 <span className='font-medium mr-2'>{post.author?.username}</span>
                 {post.caption}
             </p>
@@ -178,7 +179,7 @@ const Post = ({ post }) => {
                 )
             }
             <CommentDialog open={open} setOpen={setOpen} />
-            <div className='flex items-center justify-between mt-2'>
+            <div className='flex items-center justify-between'>
                 <input
                     type="text"
                     placeholder='Add a comment...'
@@ -189,6 +190,7 @@ const Post = ({ post }) => {
                 {
                     text && <span onClick={commentHandler} className='text-[#3BADF8] cursor-pointer'>Post</span>
                 }
+
             </div>
         </div>
     )

@@ -9,19 +9,36 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=8000
-      - URL=http://instaclone-env.eba-wumsgjeg.ap-south-1.elasticbeanstalk.com
+      - URL=https://your-frontend-service.onrender.com
       - MONGO_URI=${MONGO_URI}
       - SECRET_KEY=${SECRET_KEY}
       - API_KEY=${API_KEY}
       - API_SECRET=${API_SECRET}
       - CLOUD_NAME=${CLOUD_NAME}
     restart: always
+    healthcheck:
+      test: ["CMD", "node", "--version"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
 
   frontend:
-    build: ./frontend
+    build: 
+      context: ./frontend
+      args:
+        - VITE_API_URL=https://instaclone-jg5h.onrender.com
     container_name: instaclone-frontend
     ports:
       - "80:80"
+    environment:
+      - VITE_API_URL=https://instaclone-jg5h.onrender.com
     depends_on:
       - backend
     restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
